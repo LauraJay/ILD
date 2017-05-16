@@ -83,12 +83,14 @@ void MainWindow::on_btm_restart_clicked()
     hideSeg();
     hideVisual();
     ui->btm_restart->hide();
+    ui->btm_backToSeg->hide();
     ui->lbl_image->clear();
 }
 
 void MainWindow::on_btm_backToSeg_clicked()
 {
     hideVisual();
+    ui->btm_backToSeg->hide();
     ui->label->show();
     ui->btm_ChooseSeg->show();
     ui->btm_StartSeg->show();
