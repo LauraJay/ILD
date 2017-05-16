@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
 
 QImage image;
+std::vector<Contour*> Contours; //Alle fertigen Konturen
+std::vector<Point2f> contourPoints; //Punkte während der Erstellung einer Kontur
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,14 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
     hideVisual();
     ui->btm_restart->hide();
     ui->btm_backToSeg->hide();
-
-    // read an image
-    // cv::Mat image = cv::imread("C://Users//Laura//Documents//GUI//bild.jpg" , 1 );
-    //cv::Mat image = cv::imread("F://FH//BV_projekt_ss17//Bilder//1.jpg" , 1 );
-    // create image window named "My Image"
-    // cv::namedWindow("My Image");
-    // show the image on window
-    // cv::imshow("My Image", image);
 }
 
 
@@ -44,17 +39,21 @@ void MainWindow::on_btm_image_clicked()
             ui->btm_EndSeg->hide();
             ui->btm_image->hide();
             ui->btm_restart->show();
-
         }
     }
 }
 
+//Can be used to start a new conture
 void MainWindow::on_btm_StartSeg_clicked()
 {
-   // paintEvent();
+    //TO DO Laura:
+   //Klicken
+   //Punkt auf Vektor pushen
+   //ab zwei Punkten im Vektor Seg Algo aufrufen
+    //Wenn genug Punkte in Vektor, siehe unten:
 
-    //Malen können und wenn genug Punkte vorhanden, kann EndSeg auf show
     bool EnoughPoints = true;
+   // if(contourPoints.size()>= 3){
     if(EnoughPoints){
     ui->btm_EndSingleSeg->show();
     }
@@ -67,6 +66,7 @@ void MainWindow::on_btm_EndSingleSeg_clicked()
     ui->btm_StartSeg->show();
     ui->btm_EndSeg->show();
     ui->btm_ChooseSeg->show();
+    //Fertige Contour auf Vektor mit Konturen pushen
 }
 
 void MainWindow::on_btm_EndSeg_clicked()
@@ -93,6 +93,18 @@ void MainWindow::on_btm_backToSeg_clicked()
     ui->btm_ChooseSeg->show();
     ui->btm_StartSeg->show();
     ui->btm_EndSeg->show();
+}
+
+void MainWindow::on_btm_ChooseSeg_clicked()
+{
+   //Geignet alle vorhanden Konturen des Vektors Contours daretellen
+    //Möglichkeit bieten einzelne Konturen auuszuwählen
+}
+
+void MainWindow::on_btm_DeleteConture_clicked()
+{
+    //Konturen aus Vektor löschen
+    //Wenn keine Konturen mehr vorhanden sind, nur noch den Button zum neue Kontur erstellen anzeigen
 }
 
 void MainWindow::on_btm_ShowSeg_clicked()
@@ -137,6 +149,8 @@ void MainWindow::showVisual(){
     ui->btm_ShowLV->show();
     ui->btm_ShowAreas->show();
 }
+
+
 
 
 

@@ -24,9 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    contour.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    contour.h
 
 FORMS    += mainwindow.ui
 
@@ -42,11 +44,11 @@ LIBS += -LC:\opencv-build\install\x86\mingw\lib \
     -lopencv_calib3d320.dll
 
 #Vera
-INCLUDEPATH += F:\OpenCV_2\opencv-build\install\include
-LIBS += -LF:\OpenCV_2\opencv-build\install\x86\mingw\lib \
-    -lopencv_core320.dll \
-    -lopencv_highgui320.dll \
-    -lopencv_imgcodecs320.dll \
-    -lopencv_imgproc320.dll \
-    -lopencv_features2d320.dll \
-    -lopencv_calib3d320.dll
+#INCLUDEPATH += F:\OpenCV_2\opencv-build\install\include
+#LIBS += -LF:\OpenCV_2\opencv-build\install\x86\mingw\lib \
+#    -lopencv_core320.dll \
+#    -lopencv_highgui320.dll \
+#    -lopencv_imgcodecs320.dll \
+ #   -lopencv_imgproc320.dll \
+ #   -lopencv_features2d320.dll \
+ #   -lopencv_calib3d320.dll

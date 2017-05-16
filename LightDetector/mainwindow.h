@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <contour.h>
+
 #include <QMainWindow>
 #include <QFileDialog>
 
@@ -34,6 +36,10 @@ private slots:
     void on_btm_EndSingleSeg_clicked();
 
     void on_btm_backToSeg_clicked();
+
+    void on_btm_ChooseSeg_clicked();
+
+    void on_btm_DeleteConture_clicked();
 
 private:
     Ui::MainWindow *ui;
