@@ -31,8 +31,16 @@ private slots:
 
     void on_btm_ShowAreas_clicked();
 
+    void on_btm_EndSingleSeg_clicked();
+
+    void on_btm_backToSeg_clicked();
+
 private:
     Ui::MainWindow *ui;
+    void showSeg();
+    void hideSeg();
+    void showVisual();
+    void hideVisual();
 };
 
 #endif // MAINWINDOW_H

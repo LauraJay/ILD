@@ -10,14 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->label->hide();
-    ui->btm_StartSeg->hide();
-    ui->btm_EndSeg->hide();
-    ui->label_2->hide();
-    ui->btm_ShowSeg->hide();
-    ui->btm_ShowLV->hide();
-    ui->btm_ShowAreas->hide();
+    hideSeg();
+    hideVisual();
     ui->btm_restart->hide();
+    ui->btm_backToSeg->hide();
 
     // read an image
     // cv::Mat image = cv::imread("C://Users//Laura//Documents//GUI//bild.jpg" , 1 );
@@ -44,8 +40,8 @@ void MainWindow::on_btm_image_clicked()
         if (valid){
             image=image.scaledToWidth(ui->lbl_image->width(),Qt::SmoothTransformation);
             ui->lbl_image->setPixmap(QPixmap::fromImage(image)); //Load and Show image
-            ui->label->show();
-            ui->btm_StartSeg->show();
+            showSeg();
+            ui->btm_EndSeg->hide();
             ui->btm_image->hide();
             ui->btm_restart->show();
 
@@ -58,37 +54,45 @@ void MainWindow::on_btm_StartSeg_clicked()
    // paintEvent();
 
     //Malen können und wenn genug Punkte vorhanden, kann EndSeg auf show
-    bool Points = true;
-    if(Points){
-    ui->btm_EndSeg->show();
+    bool EnoughPoints = true;
+    if(EnoughPoints){
+    ui->btm_EndSingleSeg->show();
     }
 
+}
+
+void MainWindow::on_btm_EndSingleSeg_clicked()
+{
+    ui->btm_EndSingleSeg->hide();
+    ui->btm_StartSeg->show();
+    ui->btm_EndSeg->show();
+    ui->btm_ChooseSeg->show();
 }
 
 void MainWindow::on_btm_EndSeg_clicked()
 {
     //Malmodus beenden
-    ui->label->hide();
-    ui->btm_StartSeg->hide();
-    ui->btm_EndSeg->hide();
-    ui->label_2->show();
-    ui->btm_ShowSeg->show();
-    ui->btm_ShowLV->show();
-    ui->btm_ShowAreas->show();
+     hideSeg();
+     showVisual();
+     ui->btm_backToSeg->show();
 }
 
 void MainWindow::on_btm_restart_clicked()
 {
     ui->btm_image->show();
-    ui->label->hide();
-    ui->btm_StartSeg->hide();
-    ui->btm_EndSeg->hide();
-    ui->label_2->hide();
-    ui->btm_ShowSeg->hide();
-    ui->btm_ShowLV->hide();
-    ui->btm_ShowAreas->hide();
+    hideSeg();
+    hideVisual();
     ui->btm_restart->hide();
     ui->lbl_image->clear();
+}
+
+void MainWindow::on_btm_backToSeg_clicked()
+{
+    hideVisual();
+    ui->label->show();
+    ui->btm_ChooseSeg->show();
+    ui->btm_StartSeg->show();
+    ui->btm_EndSeg->show();
 }
 
 void MainWindow::on_btm_ShowSeg_clicked()
@@ -106,11 +110,36 @@ void MainWindow::on_btm_ShowAreas_clicked()
     //ShowAreas
 }
 
-//void MainWindow::paintEvent(QPaintEvent * event) {
-  //this will draw your widget, and therefore the label too
-  //QWidget::paintEvent(event);
+void MainWindow::hideSeg(){
+    ui->label->hide();
+    ui->btm_StartSeg->hide();
+    ui->btm_EndSeg->hide();
+    ui->btm_ChooseSeg->hide();
+    ui->btm_DeleteConture->hide();
+    ui->btm_EndSingleSeg->hide();
+}
 
-  //then draw your point
-  //Qpainter painter(this);
-  //painter.drawPoint(x, y);
-//}
+void MainWindow::showSeg(){
+    ui->label->show();
+    ui->btm_StartSeg->show();
+}
+
+void MainWindow::hideVisual(){
+    ui->label_2->hide();
+    ui->btm_ShowSeg->hide();
+    ui->btm_ShowLV->hide();
+    ui->btm_ShowAreas->hide();
+}
+
+void MainWindow::showVisual(){
+    ui->label_2->show();
+    ui->btm_ShowSeg->show();
+    ui->btm_ShowLV->show();
+    ui->btm_ShowAreas->show();
+}
+
+
+
+
+
+

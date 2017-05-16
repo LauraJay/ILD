@@ -87,20 +87,20 @@ border-color : black;</string>
      </rect>
     </property>
     <property name="text">
-     <string>Start</string>
+     <string>Start a Conture</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btm_EndSeg">
+   <widget class="QPushButton" name="btm_EndSingleSeg">
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>60</y>
+      <y>30</y>
       <width>115</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Done</string>
+     <string>Done with Conture</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -133,7 +133,7 @@ border-color : black;</string>
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>60</y>
+      <y>90</y>
       <width>113</width>
       <height>23</height>
      </rect>
@@ -146,13 +146,65 @@ border-color : black;</string>
     <property name="geometry">
      <rect>
       <x>470</x>
-      <y>90</y>
+      <y>60</y>
       <width>113</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Show Areas</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btm_EndSeg">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>90</y>
+      <width>115</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ready!</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btm_ChooseSeg">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>60</y>
+      <width>115</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose Conture</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btm_DeleteConture">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>60</y>
+      <width>115</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete Conture</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btm_backToSeg">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>300</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Back to Segmentation</string>
     </property>
    </widget>
   </widget>
