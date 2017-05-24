@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <contour.h>
+#include <QtPanel.h>
+//#include <guiinterface.h>
 
 #include <QMainWindow>
 #include <QFileDialog>
@@ -17,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool isSegment = false;
 
 private slots:
     void on_btm_image_clicked();
@@ -43,10 +46,14 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+   Livewire::QtPanel *qtp;
+    //GuiInterface *gi;
     void showSeg();
     void hideSeg();
     void showVisual();
     void hideVisual();
+    void openQtPanel(QImage img);
+
 };
 
 #endif // MAINWINDOW_H
