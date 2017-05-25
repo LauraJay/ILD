@@ -7,8 +7,8 @@
 using namespace cv;
 
 QImage image;
-std::vector<Contour*> Contours; //Alle fertigen Konturen
-std::vector<Point2f> contourPoints; //Punkte während der Erstellung einer Kontur
+//std::vector<Contour*> Contours; //Alle fertigen Konturen
+//std::vector<Point2f> contourPoints; //Punkte während der Erstellung einer Kontur
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -32,12 +32,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btm_image_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*.png, *jpg, *.jpeg)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*jpg,*jpeg)"));
     if (QString::compare(filename, QString()) !=0){
         bool valid = image.load(filename);
         if (valid){
-           // image=image.scaledToWidth(ui->lbl_image->width(),Qt::SmoothTransformation);
-           // ui->lbl_image->setPixmap(QPixmap::fromImage(image)); //Load and Show image
             openQtPanel(image);
             ui->centralWidget->activateWindow();
             showSeg();
@@ -45,8 +43,7 @@ void MainWindow::on_btm_image_clicked()
             ui->btm_image->hide();
             ui->label_1->hide();
             ui->btm_restart->show();
-            qtp->setMouseEvent(false);
-
+            qtp->setMouseEvent(false); //It is not possible to detect Contours.
         }
     }
 }
@@ -58,10 +55,10 @@ void MainWindow::openQtPanel(QImage img){
     qtp = new Livewire::QtPanel();
     qtp->show();
 
-    //scale to the maximum height
+
     if(img.height() <= ui->centralWidget->height()){
         qtp->setFixedHeight(img.height());
-    }
+    } //scale to the maximum height
     else if(img.height() > ui->centralWidget->height()){
         qtp->setFixedHeight(ui->centralWidget->height()+32);
         qtp->setFixedWidth((img.width()+32)*ui->centralWidget->height()/img.height());
@@ -71,19 +68,16 @@ void MainWindow::openQtPanel(QImage img){
     qtp->move(260,80);
 }
 
-//Can be used to start a new conture
 void MainWindow::on_btm_StartSeg_clicked()
 {
+    //Segmentation is switched on
     qtp->setMouseTracking(true);
     qtp->setMouseEvent(true);
-    //TO DO Laura:
-   //Klicken
-   //Punkt auf Vektor pushen
-   //ab zwei Punkten im Vektor Seg Algo aufrufen
-    //Wenn genug Punkte in Vektor, siehe unten:
+
+    //TO DO: Länge der Kontur abfragen und entscheiden,
+    //ob diese schon beendet werden kann.
 
     bool EnoughPoints = true;
-   // if(contourPoints.size()>= 3){
     if(EnoughPoints){
     ui->btm_EndSingleSeg->show();
     }
@@ -98,12 +92,13 @@ void MainWindow::on_btm_EndSingleSeg_clicked()
     ui->btm_StartSeg->show();
     ui->btm_EndSeg->show();
     ui->btm_ChooseSeg->show();
-    //Fertige Contour auf Vektor mit Konturen pushen
+    //TO DO 1: Fertige Contour auf Vektor mit Konturen pushen
+    //TO DO 2: Gemalte Kontur aus Fenster löschen
+
 }
 
 void MainWindow::on_btm_EndSeg_clicked()
 {
-    //Malmodus beenden
      hideSeg();
      showVisual();
      ui->btm_backToSeg->show();
@@ -119,8 +114,6 @@ void MainWindow::on_btm_restart_clicked()
     ui->btm_backToSeg->hide();
     QImage blank = QImage();
     qtp->SetImage(blank);
-  //  qtp->Reset();
-
 }
 
 void MainWindow::on_btm_backToSeg_clicked()
@@ -135,6 +128,7 @@ void MainWindow::on_btm_backToSeg_clicked()
 
 void MainWindow::on_btm_ChooseSeg_clicked()
 {
+    //TO DO: Rausfinden, wie man auf Konturen zugreift
    //Geignet alle vorhanden Konturen des Vektors Contours daretellen
     //Möglichkeit bieten einzelne Konturen auuszuwählen
 }
