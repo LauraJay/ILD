@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>598</width>
-    <height>435</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,8 +42,8 @@ max-height: 14px;
    <widget class="QPushButton" name="btm_image">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>300</y>
+      <x>20</x>
+      <y>90</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -52,42 +52,11 @@ max-height: 14px;
      <string>Load Image</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_image">
-    <property name="geometry">
-     <rect>
-      <x>6</x>
-      <y>10</y>
-      <width>441</width>
-      <height>281</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-width : 0.5px;
-border-style:solid;
-border-color : black;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_restart">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>300</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Restart</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btm_StartSeg">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>30</y>
+      <x>20</x>
+      <y>90</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -99,8 +68,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_EndSingleSeg">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>30</y>
+      <x>20</x>
+      <y>90</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -109,24 +78,11 @@ border-color : black;</string>
      <string>Done with Conture</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btm_ShowSeg">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>30</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show Segmenation</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btm_ShowLV">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>90</y>
+      <x>20</x>
+      <y>150</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -138,8 +94,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_ShowAreas">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>60</y>
+      <x>20</x>
+      <y>120</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -151,8 +107,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_EndSeg">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>90</y>
+      <x>20</x>
+      <y>150</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -164,8 +120,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_ChooseSeg">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>60</y>
+      <x>20</x>
+      <y>120</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -177,8 +133,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_DeleteConture">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>60</y>
+      <x>20</x>
+      <y>150</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -190,8 +146,8 @@ border-color : black;</string>
    <widget class="QPushButton" name="btm_backToSeg">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>300</y>
+      <x>20</x>
+      <y>240</y>
       <width>122</width>
       <height>22</height>
      </rect>
@@ -200,17 +156,98 @@ border-color : black;</string>
      <string>Back to Segmentation</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btm_restart">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>270</y>
+      <width>122</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Restart</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btm_ShowSeg">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>122</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Segmentation</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>1. Load File</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>160</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>2. Segmentation</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3. Visualization</string>
+    </property>
+   </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>591</width>
-      <height>351</height>
+      <x>-1</x>
+      <y>-1</y>
+      <width>351</width>
+      <height>601</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background: white;</string>
+     <string notr="true">background-color:rgb(255, 255, 255)</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -218,52 +255,23 @@ border-color : black;</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>470</x>
-       <y>0</y>
-       <width>115</width>
-       <height>33</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>67</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>1. Segmentation</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>470</x>
-       <y>0</y>
-       <width>113</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>2. Visualisation</string>
-     </property>
-    </widget>
    </widget>
    <zorder>frame</zorder>
    <zorder>btm_image</zorder>
-   <zorder>lbl_image</zorder>
-   <zorder>btm_restart</zorder>
    <zorder>btm_StartSeg</zorder>
    <zorder>btm_EndSingleSeg</zorder>
-   <zorder>btm_ShowSeg</zorder>
    <zorder>btm_ShowLV</zorder>
    <zorder>btm_ShowAreas</zorder>
    <zorder>btm_EndSeg</zorder>
    <zorder>btm_ChooseSeg</zorder>
    <zorder>btm_DeleteConture</zorder>
    <zorder>btm_backToSeg</zorder>
+   <zorder>btm_restart</zorder>
+   <zorder>btm_ShowSeg</zorder>
+   <zorder>label_1</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

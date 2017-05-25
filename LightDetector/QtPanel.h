@@ -51,17 +51,15 @@ namespace Livewire
 		static const QBrush PointBrush;
 
 	private:
-     //   MainWindow *mw;
-		QImage image;
 		uint w, h;
-		QPoint mouse;
+        QPoint mouse;
 		QVector<QPoint> points;
 		WeightCalculator *weights;
 		LivewireCalculator *livewire;
 		LivewireCalculator *wrapwire;
 		QImage prevwires;
 
-		void Cleanup();
+
 
 	public:
 		QtPanel(QWidget *parent = NULL);
@@ -70,6 +68,9 @@ namespace Livewire
 		void SetImage(QImage &img);
 		/// <summary>Reset the current state of the livewires</summary>
 		void Reset();
+        void Cleanup();
+        QImage image;
+        void setMouseEvent(bool mE);
 
 	protected:
 		void paintEvent(QPaintEvent *evnt);
@@ -81,7 +82,7 @@ namespace Livewire
 		/// <summary>Handles mouse clicking and double clicking. </summary>
 		/// <param name="evnt">The mouse event arguments</param>
 		/// <param name="dbl">True if the mouse double clicked</param>
-		void MouseClicked(QMouseEvent *evnt, bool dbl);
+        void MouseClicked(QMouseEvent *evnt, bool dbl);
 
 		void AddEventsToThreaded(const Threaded *t) const;
 

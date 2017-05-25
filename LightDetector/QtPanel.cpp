@@ -34,13 +34,14 @@ const QPen QtPanel::WrapwirePen(QColor(255, 128, 128), 1.5f);
 const QBrush QtPanel::MouseBrush(Qt::red);
 const QBrush QtPanel::PointBrush(Qt::yellow);
  MainWindow *mw ;
+ bool MouseEvent;//Its used to decide, whether the user is allowed to draw a contour (only after clicking start contour) or not.
 
 QtPanel::QtPanel(QWidget *parent) : QWidget(parent),
 	weights(NULL), livewire(NULL), wrapwire(NULL), w(0), h(0)
 {
     //this->setMouseTracking(true);
-    this->setWindowTitle("Livewire Demo");
-	this->resize(200, 150);
+    this->setWindowTitle("Current Image");
+    //this->resize(200, 150);
     mw = new MainWindow();
 }
 QtPanel::~QtPanel() { this->Cleanup(); }
@@ -103,6 +104,10 @@ void QtPanel::SetImage(QImage &img)
 	this->update();
 }
 
+void QtPanel::setMouseEvent(bool mE){
+    MouseEvent = mE;
+}
+
 void QtPanel::paintEvent(QPaintEvent *evnt)
 {
 	(evnt); // unreferenced
@@ -111,13 +116,6 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 	g.setRenderHint(QPainter::Antialiasing);
     // TODO: dpi stuff?
     //g.Clear(this->BackColor);
-
-    if (mw->isSegment){
-        printf("isSegment is true");
-    }
-    else{
-        printf("isSegment is false");
-    }
 
     if (!this->image.isNull() )
 	{
@@ -147,8 +145,10 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 					g.setPen(WrapwirePen);
 					this->wrapwire->DrawTrace(this->mouse.x(), this->mouse.y(), g);
 				}
+                if(MouseEvent){
 				g.setPen(LivewirePen);
 				this->livewire->DrawTrace(this->mouse.x(), this->mouse.y(), g);
+                }
 			}
 		}
 
@@ -186,7 +186,7 @@ void QtPanel::mousePressEvent(QMouseEvent *evnt)       { this->MouseClicked(evnt
 void QtPanel::mouseDoubleClickEvent(QMouseEvent *evnt) { this->MouseClicked(evnt, true); }
 void QtPanel::MouseClicked(QMouseEvent *evnt, bool dbl)
 {
-	if (evnt->button() == Qt::LeftButton && this->livewire != NULL)
+    if (evnt->button() == Qt::LeftButton && this->livewire != NULL && MouseEvent)
 	{
 		bool have_points = this->points.size() > 0;
 		QPoint p = evnt->pos();

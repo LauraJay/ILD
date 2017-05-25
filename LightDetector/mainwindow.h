@@ -19,7 +19,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    bool isSegment = false;
 
 private slots:
     void on_btm_image_clicked();
@@ -53,6 +52,7 @@ private:
     void showVisual();
     void hideVisual();
     void openQtPanel(QImage img);
+    void mousePressEventIgnore(QMouseEvent *event);
 
 };
 
