@@ -122,7 +122,8 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 {
 	(evnt); // unreferenced
 
-	QPainter g(this);
+    QPainter g(this);
+
 	g.setRenderHint(QPainter::Antialiasing);
     // TODO: dpi stuff?
     //g.Clear(this->BackColor);
@@ -150,26 +151,27 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 			if (this->points.size() > 0)
             {
 				g.setBrush(Qt::NoBrush);
-				if (this->wrapwire != NULL)
+                if (this->wrapwire != NULL && !isSegDone)
 				{
 					g.setPen(WrapwirePen);
 					this->wrapwire->DrawTrace(this->mouse.x(), this->mouse.y(), g);
 				}
-                if(MouseEvent){
-				g.setPen(LivewirePen);
+                if(MouseEvent && !isSegDone)
+                {
+                g.setPen(LivewirePen);
 				this->livewire->DrawTrace(this->mouse.x(), this->mouse.y(), g);
                 }
                 if(isSegDone){
-                    setMouseTracking(false);
+                   setMouseTracking(false);
                 }
 			}
 		}
 
 		g.setPen(Qt::NoPen); g.setBrush(PointBrush);
-		for (int i = 0; i < this->points.size(); ++i)
+        for (int i = 0; i < this->points.size(); ++i)
 			g.drawEllipse(this->points[i], 4, 4); // draw the seed points
 
-		if (!this->mouse.isNull()) { g.setBrush(MouseBrush); g.drawEllipse(this->mouse, 4, 4); } // draw the mouse indicator
+        if (!this->mouse.isNull() && !isSegDone) { g.setBrush(MouseBrush); g.drawEllipse(this->mouse, 4, 4); } // draw the mouse indicator
 
 		if (this->livewire->IsExecuting())
 		{

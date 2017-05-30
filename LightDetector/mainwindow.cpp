@@ -47,10 +47,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btm_image_clicked()
 {
-   // QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*.jpg,*.jpeg)"));
-    QString filename = QFileDialog::getOpenFileName(this,
-            tr("Choose the Image you want to analyse"), "Testbilder",
-            tr("Image (*.jpg)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Choose the Image you want to analyse"), "Testbilder",
+            tr("Images (*.jpg)"));
     if (QString::compare(filename, QString()) !=0){
         bool valid = image.load(filename);
         if (valid){
