@@ -23,14 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::EndSingleContour(){
-
-
-
-        printf("End Contour");
-       // qtp->setMouseTracking(false);
-       // qtp->setMouseEvent(false);
         ui->btm_EndSingleSeg->hide();
-         ui->lbl_PressE->hide();
+        ui->lbl_PressE->hide();
+        ui->lbl_PressE->hide();
         ui->btm_StartSeg->show();
         ui->btm_EndSeg->show();
         ui->btm_ChooseSeg->show();
@@ -94,9 +89,9 @@ void MainWindow::on_btm_StartSeg_clicked()
     ui->btm_StartSeg->hide();
     ui->btm_EndSingleSeg->show();
     ui->lbl_PressE->show();
+    ui->btm_DeleteConture->show();
 
-    //TO DO: Länge der Kontur abfragen und entscheiden,
-    //ob diese schon beendet werden kann.
+
 
 
 
@@ -106,6 +101,9 @@ void MainWindow::on_btm_StartSeg_clicked()
 
 void MainWindow::on_btm_EndSingleSeg_clicked()
 {
+
+    //TO DO: Länge der Kontur abfragen und entscheiden,
+    //ob diese schon beendet werden kann.
     if(!qtp->getIsSegDone()){
 
         QMessageBox::information(
@@ -160,8 +158,19 @@ void MainWindow::on_btm_ChooseSeg_clicked()
 
 void MainWindow::on_btm_DeleteConture_clicked()
 {
+    if(!qtp->getIsSegDone()){
+
+        QMessageBox::information(
+            this,
+            tr("Warning"),
+            tr("Please make sure to end your Segmentation using the Key 'E' before trying to delete it.") );
+        qtp->activateWindow();
+    }
+    else{
     //Konturen aus Vektor löschen
     //Wenn keine Konturen mehr vorhanden sind, nur noch den Button zum neue Kontur erstellen anzeigen
+        //Nächste Buttomn aufrufen
+    }
 }
 
 void MainWindow::on_btm_ShowSeg_clicked()
