@@ -22,6 +22,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btm_backToSeg->hide();
 }
 
+void MainWindow::EndSingleContour(){
+
+
+
+        printf("End Contour");
+       // qtp->setMouseTracking(false);
+       // qtp->setMouseEvent(false);
+        ui->btm_EndSingleSeg->hide();
+         ui->lbl_PressE->hide();
+        ui->btm_StartSeg->show();
+        ui->btm_EndSeg->show();
+        ui->btm_ChooseSeg->show();
+        //TO DO 1: Fertige Contour auf Vektor mit Konturen pushen
+        //TO DO 2: Gemalte Kontur aus Fenster löschen
+}
 
 
 MainWindow::~MainWindow()
@@ -32,7 +47,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btm_image_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*jpg,*jpeg)"));
+   // QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images(*.jpg,*.jpeg)"));
+    QString filename = QFileDialog::getOpenFileName(this,
+            tr("Choose the Image you want to analyse"), "Testbilder",
+            tr("Image (*.jpg)"));
     if (QString::compare(filename, QString()) !=0){
         bool valid = image.load(filename);
         if (valid){
@@ -73,27 +91,35 @@ void MainWindow::on_btm_StartSeg_clicked()
     //Segmentation is switched on
     qtp->setMouseTracking(true);
     qtp->setMouseEvent(true);
+    qtp->setIsSegDone(false);
+
+    ui->btm_StartSeg->hide();
+    ui->btm_EndSingleSeg->show();
+    ui->lbl_PressE->show();
 
     //TO DO: Länge der Kontur abfragen und entscheiden,
     //ob diese schon beendet werden kann.
 
-    bool EnoughPoints = true;
-    if(EnoughPoints){
-    ui->btm_EndSingleSeg->show();
-    }
+
+
+
 
 }
 
 void MainWindow::on_btm_EndSingleSeg_clicked()
 {
-    qtp->setMouseTracking(false);
-    qtp->setMouseEvent(false);
-    ui->btm_EndSingleSeg->hide();
-    ui->btm_StartSeg->show();
-    ui->btm_EndSeg->show();
-    ui->btm_ChooseSeg->show();
-    //TO DO 1: Fertige Contour auf Vektor mit Konturen pushen
-    //TO DO 2: Gemalte Kontur aus Fenster löschen
+    if(!qtp->getIsSegDone()){
+
+        QMessageBox::information(
+            this,
+            tr("Warning"),
+            tr("Please make sure to end your Segmentation using the Key 'E' before trying to save it.") );
+        qtp->activateWindow();
+    }
+    else if(qtp->getIsSegDone()){
+       // printf("abgeschlossen");
+        EndSingleContour();
+    }
 
 }
 
@@ -124,6 +150,7 @@ void MainWindow::on_btm_backToSeg_clicked()
     ui->btm_ChooseSeg->show();
     ui->btm_StartSeg->show();
     ui->btm_EndSeg->show();
+    ui->lbl_PressE->show();
 }
 
 void MainWindow::on_btm_ChooseSeg_clicked()
@@ -158,6 +185,7 @@ void MainWindow::hideSeg(){
     ui->label_2->hide();
     ui->btm_StartSeg->hide();
     ui->btm_EndSeg->hide();
+    ui->lbl_PressE->hide();
     ui->btm_ChooseSeg->hide();
     ui->btm_DeleteConture->hide();
     ui->btm_EndSingleSeg->hide();

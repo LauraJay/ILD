@@ -255,6 +255,22 @@ max-height: 14px;
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QLabel" name="lbl_PressE">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Press 'E' to end a conture.</string>
+     </property>
+    </widget>
    </widget>
    <zorder>frame</zorder>
    <zorder>btm_image</zorder>

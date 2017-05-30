@@ -34,7 +34,9 @@ const QPen QtPanel::WrapwirePen(QColor(255, 128, 128), 1.5f);
 const QBrush QtPanel::MouseBrush(Qt::red);
 const QBrush QtPanel::PointBrush(Qt::yellow);
  MainWindow *mw ;
+
  bool MouseEvent;//Its used to decide, whether the user is allowed to draw a contour (only after clicking start contour) or not.
+ bool isSegDone;
 
 QtPanel::QtPanel(QWidget *parent) : QWidget(parent),
 	weights(NULL), livewire(NULL), wrapwire(NULL), w(0), h(0)
@@ -108,6 +110,14 @@ void QtPanel::setMouseEvent(bool mE){
     MouseEvent = mE;
 }
 
+ void QtPanel::setIsSegDone(bool isd){
+     isSegDone= isd;
+ }
+
+   bool QtPanel::getIsSegDone(){
+   return isSegDone;
+ }
+
 void QtPanel::paintEvent(QPaintEvent *evnt)
 {
 	(evnt); // unreferenced
@@ -133,12 +143,12 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 		for (int i = 0; i < doing.count(); ++i)
 			g.drawRect(doing[i].x(), doing[i].y(), block_size, block_size);
 
-		if (this->livewire != NULL)
+        if (this->livewire != NULL)
 		{
 			// Draw the previous, wrapping, and current livewires
 			g.drawImage(0, 0, this->prevwires);
 			if (this->points.size() > 0)
-			{
+            {
 				g.setBrush(Qt::NoBrush);
 				if (this->wrapwire != NULL)
 				{
@@ -148,6 +158,9 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
                 if(MouseEvent){
 				g.setPen(LivewirePen);
 				this->livewire->DrawTrace(this->mouse.x(), this->mouse.y(), g);
+                }
+                if(isSegDone){
+                    setMouseTracking(false);
                 }
 			}
 		}
@@ -172,11 +185,21 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 	}
 }
 
+ void QtPanel::keyPressEvent(QKeyEvent *evnt)
+{
+    switch (evnt->key()) {
+        case Qt::Key_E:{
+        printf("End Contour ");
+        isSegDone = true;
+        break;}
+    }
+}
+
 void QtPanel::mouseMoveEvent(QMouseEvent *evnt)
 {
 	QPoint p = evnt->pos();
 	this->getPointInBounds(p);
-	if (this->mouse != p)
+    if (this->mouse != p && MouseEvent)
 	{
 		this->mouse = p;
 		this->update();
@@ -184,9 +207,10 @@ void QtPanel::mouseMoveEvent(QMouseEvent *evnt)
 }
 void QtPanel::mousePressEvent(QMouseEvent *evnt)       { this->MouseClicked(evnt, false); }
 void QtPanel::mouseDoubleClickEvent(QMouseEvent *evnt) { this->MouseClicked(evnt, true); }
+
 void QtPanel::MouseClicked(QMouseEvent *evnt, bool dbl)
 {
-    if (evnt->button() == Qt::LeftButton && this->livewire != NULL && MouseEvent)
+    if (evnt->button() == Qt::LeftButton && this->livewire != NULL && MouseEvent ) //&& !isSegDone)
 	{
 		bool have_points = this->points.size() > 0;
 		QPoint p = evnt->pos();

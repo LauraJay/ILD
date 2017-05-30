@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -52,7 +53,9 @@ private:
     void showVisual();
     void hideVisual();
     void openQtPanel(QImage img);
-    void mousePressEventIgnore(QMouseEvent *event);
+    void EndSingleContour();
+   // void keyPressEvent(QKeyEvent *e);
+
 
 };
 

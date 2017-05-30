@@ -71,12 +71,15 @@ namespace Livewire
         void Cleanup();
         QImage image;
         void setMouseEvent(bool mE);
+        void setIsSegDone(bool isd);
+        bool getIsSegDone();
 
 	protected:
 		void paintEvent(QPaintEvent *evnt);
 		void mouseMoveEvent(QMouseEvent *evnt);
 		void mousePressEvent(QMouseEvent *evnt);
 		void mouseDoubleClickEvent(QMouseEvent *evnt);
+        void keyPressEvent(QKeyEvent *evnt);
 
 	private:
 		/// <summary>Handles mouse clicking and double clicking. </summary>
