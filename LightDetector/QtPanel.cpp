@@ -189,12 +189,17 @@ void QtPanel::paintEvent(QPaintEvent *evnt)
 
  void QtPanel::keyPressEvent(QKeyEvent *evnt)
 {
-    switch (evnt->key()) {
-        case Qt::Key_E:{
-        printf("End Contour ");
-        isSegDone = true;
-        break;}
-    }
+
+     if(evnt->key() == Qt::Key_E && points.size()>=2){
+         printf("End Contour ");
+         isSegDone = true;
+     }
+//    switch (evnt->key()) {
+//        case Qt::Key_E:{
+//        printf("End Contour ");
+//        isSegDone = true;
+//        break;}
+//    }
 }
 
 void QtPanel::mouseMoveEvent(QMouseEvent *evnt)

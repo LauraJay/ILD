@@ -53,7 +53,6 @@ namespace Livewire
 	private:
 		uint w, h;
         QPoint mouse;
-		QVector<QPoint> points;
 		WeightCalculator *weights;
 		LivewireCalculator *livewire;
 		LivewireCalculator *wrapwire;
@@ -70,6 +69,7 @@ namespace Livewire
 		void Reset();
         void Cleanup();
         QImage image;
+        QVector<QPoint> points;
         void setMouseEvent(bool mE);
         void setIsSegDone(bool isd);
         bool getIsSegDone();

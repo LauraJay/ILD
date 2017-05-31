@@ -3,7 +3,6 @@
 
 #include <contour.h>
 #include <QtPanel.h>
-//#include <guiinterface.h>
 
 #include <QMainWindow>
 #include <QFileDialog>
@@ -40,23 +39,22 @@ private slots:
 
     void on_btm_backToSeg_clicked();
 
-    void on_btm_ChooseSeg_clicked();
+   // void on_btm_ChooseSeg_clicked();
 
     void on_btm_DeleteConture_clicked();
 
 private:
     Ui::MainWindow *ui;
-   Livewire::QtPanel *qtp;
-    //GuiInterface *gi;
+    Livewire::QtPanel *qtp;
+    Contour *c;
     void showSeg();
     void hideSeg();
     void showVisual();
     void hideVisual();
+    void hideRadioButton();
     void openQtPanel(QImage img);
     void EndSingleContour();
-   // void keyPressEvent(QKeyEvent *e);
-
-
+    void drawRadioButton();
 };
 
 #endif // MAINWINDOW_H

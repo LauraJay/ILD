@@ -7,8 +7,8 @@
 using namespace cv;
 
 QImage image;
-//std::vector<Contour*> Contours; //Alle fertigen Konturen
-//std::vector<Point2f> contourPoints; //Punkte während der Erstellung einer Kontur
+QVector<Contour*> Contours; //Alle fertigen Konturen
+QVector<QPoint> contourPoints; //Punkte während der Erstellung einer Kontur
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     hideSeg();
     hideVisual();
+    hideRadioButton();
     ui->btm_restart->hide();
     ui->btm_backToSeg->hide();
 }
@@ -25,12 +26,55 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::EndSingleContour(){
         ui->btm_EndSingleSeg->hide();
         ui->lbl_PressE->hide();
-        ui->lbl_PressE->hide();
+        ui->lbl_PressE_2->hide();
         ui->btm_StartSeg->show();
         ui->btm_EndSeg->show();
-        ui->btm_ChooseSeg->show();
-        //TO DO 1: Fertige Contour auf Vektor mit Konturen pushen
+        ui->btm_DeleteConture->hide();
+        ui->lbl_CurrentCon->show();
+
+        c = new Contour(contourPoints);
+        Contours.push_back(c); //Aktuelle Kontur mit allen Anderen Konturen zs speichern
+
+        drawRadioButton();
+
+        //TO DO 1: Radio Buttons anzeigen
         //TO DO 2: Gemalte Kontur aus Fenster löschen
+}
+
+void MainWindow::drawRadioButton(){
+    switch (Contours.size()) {
+        case 1: ui->rad_Con_1->show(); break;
+        case 2:{
+        ui->rad_Con_1->show();
+        ui->rad_Con_2->show();
+        break;}
+        case 3:{
+        ui->rad_Con_1->show();
+        ui->rad_Con_2->show();
+        ui->rad_Con_3->show();
+        break;}
+        case 4:{
+        ui->rad_Con_1->show();
+        ui->rad_Con_2->show();
+        ui->rad_Con_3->show();
+        ui->rad_Con_4->show();
+        break;}
+        case 5:{
+        ui->rad_Con_1->show();
+        ui->rad_Con_2->show();
+        ui->rad_Con_3->show();
+        ui->rad_Con_4->show();
+        ui->rad_Con_5->show();
+        break;}
+        case 6:{
+        ui->rad_Con_1->show();
+        ui->rad_Con_2->show();
+        ui->rad_Con_3->show();
+        ui->rad_Con_4->show();
+        ui->rad_Con_5->show();
+        ui->rad_Con_6->show();
+        break;}
+    }
 }
 
 
@@ -38,6 +82,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete qtp;
+    delete c;
 }
 
 void MainWindow::on_btm_image_clicked()
@@ -86,9 +131,11 @@ void MainWindow::on_btm_StartSeg_clicked()
     qtp->setMouseEvent(true);
     qtp->setIsSegDone(false);
 
+    hideRadioButton();
     ui->btm_StartSeg->hide();
     ui->btm_EndSingleSeg->show();
     ui->lbl_PressE->show();
+     ui->lbl_PressE_2->show();
     ui->btm_DeleteConture->show();
 
 
@@ -104,6 +151,7 @@ void MainWindow::on_btm_EndSingleSeg_clicked()
 
     //TO DO: Länge der Kontur abfragen und entscheiden,
     //ob diese schon beendet werden kann.
+    contourPoints = qtp->points;
     if(!qtp->getIsSegDone()){
 
         QMessageBox::information(
@@ -112,8 +160,14 @@ void MainWindow::on_btm_EndSingleSeg_clicked()
             tr("Please make sure to end your Segmentation using the Key 'E' before trying to save it.") );
         qtp->activateWindow();
     }
+//    else if(contourPoints.size()<2){
+//        QMessageBox::information(
+//            this,
+//            tr("Warning"),
+//            tr("Your Contour is not long enough. Please make sure, that it contains at öeast two points.") );
+//        qtp->activateWindow();
+   // }
     else if(qtp->getIsSegDone()){
-       // printf("abgeschlossen");
         EndSingleContour();
     }
 
@@ -143,18 +197,19 @@ void MainWindow::on_btm_backToSeg_clicked()
     hideVisual();
     ui->btm_backToSeg->hide();
     ui->label_2->show();
-    ui->btm_ChooseSeg->show();
+   // ui->btm_ChooseSeg->show();
     ui->btm_StartSeg->show();
     ui->btm_EndSeg->show();
     ui->lbl_PressE->show();
+    ui->lbl_PressE_2->show();
 }
 
-void MainWindow::on_btm_ChooseSeg_clicked()
-{
-    //TO DO: Rausfinden, wie man auf Konturen zugreift
-   //Geignet alle vorhanden Konturen des Vektors Contours daretellen
-    //Möglichkeit bieten einzelne Konturen auuszuwählen
-}
+//void MainWindow::on_btm_ChooseSeg_clicked()
+//{
+//    //TO DO: Rausfinden, wie man auf Konturen zugreift
+//   //Geignet alle vorhanden Konturen des Vektors Contours daretellen
+//    //Möglichkeit bieten einzelne Konturen auuszuwählen
+//}
 
 void MainWindow::on_btm_DeleteConture_clicked()
 {
@@ -193,7 +248,8 @@ void MainWindow::hideSeg(){
     ui->btm_StartSeg->hide();
     ui->btm_EndSeg->hide();
     ui->lbl_PressE->hide();
-    ui->btm_ChooseSeg->hide();
+     ui->lbl_PressE_2->hide();
+    //ui->btm_ChooseSeg->hide();
     ui->btm_DeleteConture->hide();
     ui->btm_EndSingleSeg->hide();
 }
@@ -216,6 +272,18 @@ void MainWindow::showVisual(){
     ui->btm_ShowLV->show();
     ui->btm_ShowAreas->show();
 }
+
+void MainWindow::hideRadioButton(){
+    ui->rad_Con_1->hide();
+    ui->rad_Con_2->hide();
+    ui->rad_Con_3->hide();
+    ui->rad_Con_4->hide();
+    ui->rad_Con_5->hide();
+    ui->rad_Con_6->hide();
+    ui->lbl_CurrentCon->hide();
+}
+
+
 
 
 
