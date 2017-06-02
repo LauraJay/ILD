@@ -23,38 +23,22 @@ public:
 private slots:
     void on_btm_image_clicked();
 
-    void on_btm_StartSeg_clicked();
-
-    void on_btm_EndSeg_clicked();
+    void on_btm_mask_clicked();
 
     void on_btm_restart_clicked();
 
-    void on_btm_ShowSeg_clicked();
-
     void on_btm_ShowLV_clicked();
 
-    void on_btm_ShowAreas_clicked();
+    void on_btm_Run_clicked();
 
-    void on_btm_EndSingleSeg_clicked();
+    void on_toggle_btm_showMask_clicked();
 
-    void on_btm_backToSeg_clicked();
 
-   // void on_btm_ChooseSeg_clicked();
-
-    void on_btm_DeleteConture_clicked();
 
 private:
     Ui::MainWindow *ui;
-    Livewire::QtPanel *qtp;
-    Contour *c;
-    void showSeg();
-    void hideSeg();
     void showVisual();
     void hideVisual();
-    void hideRadioButton();
-    void openQtPanel(QImage img);
-    void EndSingleContour();
-    void drawRadioButton();
 };
 
 #endif // MAINWINDOW_H

@@ -595,7 +595,7 @@ const WeightCalculator::Settings WeightCalculator::GrayScaleSettings;
 //const WeightCalculator::Settings WeightCalculator::GrayScaleSettings(WeightCalculator::BlueChannel,
 //	WeightCalculator::NoPixelReduction, WeightCalculator::NoNoiseReduction, WeightCalculator::NoEdgeDetection, WeightCalculator::NoAccentuation, false);
 
-const WeightCalculator::Settings WeightCalculator::ColorSettings(WeightCalculator::WeightedHSV, WeightCalculator::Mean3pxWindow, WeightCalculator::NoNoiseReduction, WeightCalculator::Sobel, WeightCalculator::NoAccentuation, false);
+const WeightCalculator::Settings WeightCalculator::ColorSettings(WeightCalculator::AvgRGB, WeightCalculator::Gaussian5pxWindow, WeightCalculator::NoNoiseReduction, WeightCalculator::Sobel, WeightCalculator::Sigmoid, false);
 
 WeightCalculator::WeightCalculator(uint w, uint h, const Settings& settings) : Threaded("Weight Calculator"),
 	_data_raw(NULL), _stride(0), _format(GrayscaleByte),

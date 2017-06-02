@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>640</height>
+    <width>1141</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,100 +46,6 @@ max-height: 14px;
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="btm_image">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Load Image</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_StartSeg">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start a new Conture</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_ShowLV">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>150</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show Lightvectors</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_ShowAreas">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>120</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show Areas</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_EndSeg">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>470</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Finish Segmentation</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_backToSeg">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>470</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Back to Segmentation</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_restart">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>500</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Restart</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_1">
     <property name="geometry">
      <rect>
@@ -150,149 +56,16 @@ max-height: 14px;
      </rect>
     </property>
     <property name="text">
-     <string>1. Load File</string>
+     <string>Light Detector</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>131</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>2. Segmentation</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>131</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>3. Visualization</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_DeleteConture">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>120</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Delete  Conture(s)</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_CurrentCon">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>120</y>
-      <width>151</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Current Contours:</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_1">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>150</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 1</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_2">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>170</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 2</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_3">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>190</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 3</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_4">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>210</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 4</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_5">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>230</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 5</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rad_Con_6">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>250</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Contour 6</string>
-    </property>
-   </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="toggle_btm_showMask">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>-20</y>
-      <width>241</width>
-      <height>571</height>
+      <width>1131</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -301,86 +74,116 @@ max-height: 14px;
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="lbl_PressE">
+    <widget class="QPushButton" name="btm_Run">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
-       <width>251</width>
-       <height>20</height>
+       <y>190</y>
+       <width>122</width>
+       <height>22</height>
       </rect>
      </property>
-     <property name="styleSheet">
-      <string notr="true">font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
-     </property>
      <property name="text">
-      <string>Mark at least 2 points </string>
+      <string>Run</string>
      </property>
     </widget>
-    <widget class="QLabel" name="lbl_PressE_2">
+    <widget class="QPushButton" name="btm_restart">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>90</y>
-       <width>251</width>
+       <x>20</x>
+       <y>220</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Restart</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btm_ShowLV">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>260</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Lightvectors</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btm_mask">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load Mask Image</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btm_image">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Load Image</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_image">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>120</y>
+       <width>800</width>
+       <height>500</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_mask">
+     <property name="geometry">
+      <rect>
+       <x>1130</x>
+       <y>610</y>
+       <width>800</width>
+       <height>500</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>300</y>
+       <width>95</width>
        <height>20</height>
       </rect>
      </property>
-     <property name="styleSheet">
-      <string notr="true">font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
-     </property>
      <property name="text">
-      <string>and press 'E'.</string>
+      <string>Show Mask</string>
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="btm_EndSingleSeg">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save Conture</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btm_ShowSeg">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>122</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show Segmentation</string>
-    </property>
-   </widget>
-   <zorder>frame</zorder>
-   <zorder>btm_image</zorder>
-   <zorder>btm_StartSeg</zorder>
-   <zorder>btm_ShowLV</zorder>
-   <zorder>btm_ShowAreas</zorder>
-   <zorder>btm_EndSeg</zorder>
-   <zorder>btm_backToSeg</zorder>
-   <zorder>btm_restart</zorder>
+   <zorder>toggle_btm_showMask</zorder>
    <zorder>label_1</zorder>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
-   <zorder>btm_DeleteConture</zorder>
-   <zorder>lbl_CurrentCon</zorder>
-   <zorder>rad_Con_1</zorder>
-   <zorder>rad_Con_2</zorder>
-   <zorder>rad_Con_3</zorder>
-   <zorder>rad_Con_4</zorder>
-   <zorder>rad_Con_5</zorder>
-   <zorder>rad_Con_6</zorder>
-   <zorder>btm_EndSingleSeg</zorder>
-   <zorder>btm_ShowSeg</zorder>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

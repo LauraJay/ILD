@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "QtPanel.h"
 #include <QApplication>
+#include"lightcalculator.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +14,7 @@ int main(int argc, char *argv[])
     m.setFixedWidth(150);
     m.move(100,80);
     m.show();
+    LightCalculator* lc = new LightCalculator();
     return a.exec();
 }
 
