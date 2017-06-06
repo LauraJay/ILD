@@ -35,10 +35,13 @@ private slots:
 
 
 
+    void on_rad_ShowMask_clicked();
+
 private:
     Ui::MainWindow *ui;
     void showVisual();
     void hideVisual();
+    void findObjectContour();
 };
 
 #endif // MAINWINDOW_H

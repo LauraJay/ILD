@@ -116,19 +116,6 @@ max-height: 14px;
       <string>Show Lightvectors</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btm_mask">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>150</y>
-       <width>122</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Load Mask Image</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="btm_image">
      <property name="geometry">
       <rect>
@@ -145,10 +132,10 @@ max-height: 14px;
     <widget class="QLabel" name="lbl_image">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>120</y>
-       <width>800</width>
-       <height>500</height>
+       <x>160</x>
+       <y>30</y>
+       <width>851</width>
+       <height>521</height>
       </rect>
      </property>
      <property name="text">
@@ -168,11 +155,11 @@ max-height: 14px;
       <string/>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QRadioButton" name="rad_ShowMask">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>300</y>
+       <x>30</x>
+       <y>160</y>
        <width>95</width>
        <height>20</height>
       </rect>

@@ -7,11 +7,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-   // Livewire::QtPanel qtTest;
+    // Livewire::QtPanel qtTest;
     //qtTest.show();
     MainWindow m;
     m.setFixedHeight(600);
-    m.setFixedWidth(150);
+    m.setFixedWidth(1100);
     m.move(100,80);
     m.show();
     LightCalculator* lc = new LightCalculator();
