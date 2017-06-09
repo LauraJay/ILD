@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     m.setFixedWidth(1100);
     m.move(100,80);
     m.show();
-    LightCalculator* lc = new LightCalculator();
+    //LightCalculator* lc = new LightCalculator();
     return a.exec();
 }
 
