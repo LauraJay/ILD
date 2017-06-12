@@ -53,6 +53,7 @@ private:
     void paintStartPoint();
     void markNrOfContour();
     void deleteDrawnSelection();
+    void paintSubContour(int n);
 
 };
 

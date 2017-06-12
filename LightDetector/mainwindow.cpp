@@ -8,16 +8,15 @@
 using namespace cv;
 using namespace std;
 
-QImage image;
-QImage maskImage;
-Mat imageInCV, imageCanny;
+QImage imageQT;
+Mat maskImage, imageCV, imageCVwithContour;
 vector<vector<Point> > MainContour; //Muss wegen cv::findContour() von diesem Typ sein
 vector<Point> SubContour; //Momentan kann zum Testen nur eine Subkontur erstellt werden
 vector<Vec4i> hierarchy;
 QRect CroppedRect;
 QPen redPen, redPenThick, whitePen;
-int translationX = 162; //Nur so passen die ausgeschnittenen Vierecke (muss ich noch verstehen)
-int translationY = 2;
+int posImageLableX = 0; //Nur so passen die ausgeschnittenen Vierecke (muss ich noch verstehen)
+int posImageLableY = 0;
 
 
 bool isSelect;
@@ -43,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     redPenThick.setColor(QColor(255,0,0));
     whitePen.setWidth(3);
     whitePen.setColor(QColor(255,255,255));
-   }
+    }
 
 
 
@@ -57,17 +56,20 @@ void MainWindow::on_btm_image_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Choose the Image you want to analyse"), "Testbilder/mitMasken",
             tr("Images (*.jpg)"));
+     std::string str = filename.toStdString();
+     imageCV = imread(str.c_str(), CV_LOAD_IMAGE_COLOR); //momentan wird für openCV immer die gleiche Datei geladen
+      std::string filenameCV = str.substr(0,str.size()-4);
+//     printf("\n", filenameCV.c_str());
+     filenameCV+="_mask.jpg";
+//     printf(filenameCV.c_str());
 
-    char* filenameCV = "C:\\Users\\Laura\\Desktop\\Projekte\\ILD\\build-LightDetector-Desktop_Qt_5_8_0_MinGW_32bit-Release\\Testbilder\\mitMasken\\TestImg_17_mask_glatt.jpg";
-    imageInCV = imread(filenameCV, CV_8UC3); //momentan wird für openCV immer die gleiche Datei geladen
-
+   Mat maskImageLoaded = imread(filenameCV.c_str(), CV_8UC3); //momentan wird für openCV immer die gleiche Datei geladen
 
     if (QString::compare(filename, QString()) !=0){
-        bool valid = image.load(filename);
+        bool valid = imageQT.load(filename);
         if (valid){
-            image=image.scaledToWidth(ui->lbl_image->width(), Qt::SmoothTransformation);
-           // ui->lbl_image->setPixmap(px);
-            ui->lbl_image->setPixmap(QPixmap::fromImage(image));
+            imageQT=imageQT.scaled(ui->lbl_image->width(),ui->lbl_image->height(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+            ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
             ui->centralWidget->activateWindow();
             ui->btm_restart->show();
             ui->lbl_mask->hide();
@@ -76,8 +78,12 @@ void MainWindow::on_btm_image_clicked()
             ui->rad_Con1->hide();
             ui->btm_selection->hide();
             ui->btm_image->hide();
-            printf("\n Bildgroesse width: %i und height: % i" , image.width(), image.height());
+            cv::resize(maskImageLoaded, maskImage, Size(imageQT.width(), imageQT.height()));
+            cv::resize(imageCV, imageCV, Size(imageQT.width(), imageQT.height()));
+
+            printf("\n Bildgroesse width: %i und height: % i" , imageQT.width(), imageQT.height());
             printf("\n Labelgroesse width: %i und height: % i" , ui->lbl_image->width(), ui->lbl_image->height());
+            printf("\n Bildgroesse CV width: %i und height: % i" , maskImage.size().width, maskImage.size().height);
         }
     }
 }
@@ -94,6 +100,9 @@ void MainWindow::on_btm_restart_clicked()
     ui->btm_selection->hide();
     ui->btm_deleteSelection->hide();
     ui->btm_saveSelection->hide();
+    SubContour.clear();
+    MainContour.clear();
+    hierarchy.clear();
 }
 
 
@@ -124,28 +133,26 @@ void MainWindow::on_btm_Run_clicked(){
       int dilation_size = 1;
       Mat imageAfterMorph;
       Mat element = getStructuringElement(MORPH_RECT, Size(2*dilation_size+ 1 , 2*dilation_size+ 1), Point(dilation_size, dilation_size));
-      dilate(imageInCV, imageAfterMorph, element );
-
+      dilate(maskImage, imageAfterMorph, element );
+       Mat imageCanny;
       // Canny to detect edges
-      Canny(imageAfterMorph, imageCanny, 0, 300 , 5);
+      Canny(maskImage, imageCanny, 0, 1200 , 5);
 
       // Find associated Contours and draw them (in our case it) into the Mat imageWithContours
-      findContours(imageCanny, MainContour, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0,0));
-      printf("\n Anzahl Konturen: %i " , MainContour.size());
-      Mat imageWithContours = Mat::zeros(imageInCV.size(), CV_8UC3);
+      findContours(imageCanny, MainContour, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0,0));
+     // printf("\n Anzahl Konturen: %i " , MainContour.size());
+     imageCVwithContour = imageCV.clone();
       for (int i=0; i<MainContour.size(); i++){
-         //drawContours( imageWithContours, MainContour, 1, Scalar (0, 255,0), 2, 8, hierarchy, 0, Point() );
-         // drawContours( imageWithContours, MainContour, 0, Scalar (255, 0,0), 2, 8, hierarchy, 0, Point() );
-         drawContours( imageWithContours, MainContour, i, Scalar (255, 255,255), 2, 8, hierarchy, 0, Point() );
+          drawContours( imageCVwithContour, MainContour, i, Scalar (0, 255,0), 2, 8, hierarchy, 0, Point() );
 
       }
 
       //Display Contour as QImage
-      image= Mat2QImage(imageWithContours);
-      ui->lbl_image->setPixmap(QPixmap::fromImage(image));
+      imageQT= Mat2QImage(imageCVwithContour);
+      ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
       //imshow("Ausgangsbild", imageInCV);
       //imshow("Verkleinerte Kontur", imageAfterMorph);
-      //imshow("Canny ", imageCanny);
+     // imshow("Canny ", imageCanny);
       ui->btm_selection->show();
       ui->btm_Run->hide();
 }
@@ -164,14 +171,14 @@ QImage MainWindow::Mat2QImage(Mat const& src){
     QImage resultLarge((const uchar*) tmp.data, tmp.cols, tmp.rows, tmp.step, QImage::Format_RGB888);
     resultLarge.bits();
     //Bild so verkleinern, dass es passend in GUI angezeigt wird
-    QImage result = resultLarge.scaled(image.width(), image.height(),Qt::KeepAspectRatio);
-    printf("\n Bildgroesse Result width: %i und height: % i" , result.width(), result.height());
-    printf("\n Bildgroesse Vorher width: %i und height: % i" , resultLarge.width(), resultLarge.height());
+    QImage result = resultLarge.scaled(imageQT.width(), imageQT.height(),Qt::KeepAspectRatio);
+//    printf("\n Bildgroesse Result width: %i und height: % i" , result.width(), result.height());
+//    printf("\n Bildgroesse Vorher width: %i und height: % i" , resultLarge.width(), resultLarge.height());
     return result;
 }
 
 void MainWindow::cropContour(QRect rect){
-    QImage croppedImage = image.copy(rect);
+    QImage croppedImage = imageQT.copy(rect);
     croppedImage.save("cropped_Image");
     ui->lbl_image->setPixmap(QPixmap::fromImage(croppedImage));
 }
@@ -183,25 +190,33 @@ void MainWindow::savePartOfContour(){
     int yBoxLow = CroppedRect.topLeft().y();
 
     printf("\n Laenge der Subkontur zu Beginn: %i (Soll 0 sein!)" , SubContour.size());
-    printf("\n Laenge der Kontur 1: %i" , MainContour.at(0).size());
-    printf("\n Laenge der Kontur 2: %i" , MainContour.at(1).size());
+    Mat imageDebug = Mat::zeros(maskImage.size(), CV_8UC3);
+    Rect r = Rect(Point(xBoxHigh,yBoxHigh),Point(xBoxLow,yBoxLow));
+    rectangle(imageDebug,r,Scalar(0,0,255));
     for (int i=0; i<MainContour.at(0).size(); i++){
+        int xCon= MainContour.at(0).at(i).x;
+        int yCon= MainContour.at(0).at(i).y;
 
-        int xCon= MainContour.at(0).at(i).x - translationX;
-        int yCon= MainContour.at(0).at(i).y + translationY;
-
-        //Es werden noch zu wenig Konturenpunkte als innerhalb des Vierecks erkannt
-        if(xBoxLow <= xCon && xCon <= xBoxHigh && yBoxLow <= yCon && yCon <= yBoxHigh){
+        if (CroppedRect.contains(xCon, yCon)){
             printf("\n Konturenpunkt liegt innerhalb der Auswahl");
             SubContour.push_back(Point(xCon,yCon));
             ui->rad_Con1->setChecked(true);
+            circle(imageDebug,Point(xCon,yCon),1,Scalar(0,255,0));
+
+        }
+        else{
+
+        circle(imageDebug,Point(xCon,yCon),1,Scalar(255,0,0));
+
         }
     }
     printf("\n Laenge der Subkontur nach Selektierung: %i (Soll Anzahl aller Konturenpunkte innerhalb der Auswahl zählen)" , SubContour.size());
     if(SubContour.size()>=3){
         ui->lbl_ListContours->show();
         ui->rad_Con1->show();
-    }
+        paintSubContour(0);
+       imshow("Debug", imageDebug);
+      }
     else if(SubContour.size()<3){
         deleteDrawnSelection();
         QMessageBox::information(
@@ -225,12 +240,14 @@ void MainWindow::on_btm_selection_clicked()
 void MainWindow::mousePressEvent(QMouseEvent *event){
    if(isSelect){
       isDrawing = true;
+      posImageLableX = ui->lbl_image->pos().x()+ui->centralWidget->pos().x()+ui->toggle_btm_showMask->pos().x();
+      posImageLableY = ui->lbl_image->pos().y()+ ui->centralWidget->pos().y()+ui->toggle_btm_showMask->pos().y();
     //isSelect = false;
     //Set Both Points to the same Starvalue
-    CroppedRect.setTopLeft(QPoint(event->pos().rx()-translationX, event->pos().ry()+translationY));
+    CroppedRect.setTopLeft(QPoint(event->pos().x()-posImageLableX, event->pos().y()-posImageLableY));
     paintStartPoint();
     markNrOfContour();
-    printf("\n Cropped Rect top left x=%i und y=%i", CroppedRect.topLeft().rx(), CroppedRect.topLeft().ry());
+    printf("\n Cropped Rect top left x=%i und y=%i", CroppedRect.topLeft().x(), CroppedRect.topLeft().y());
     }
 }
 
@@ -238,51 +255,63 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
 
 
        if(event->type() == QEvent::MouseMove && isDrawing){
-          CroppedRect.setBottomRight(QPoint(event->pos().rx()-translationX, event->pos().ry()+translationY));
-          //printf("\n Cropped Rect bottom right x=%i und y=%i", CroppedRect.bottomRight().rx(), CroppedRect.bottomRight().ry());
+           posImageLableX = ui->lbl_image->pos().x()+ui->centralWidget->pos().x()+ui->toggle_btm_showMask->pos().x();
+           posImageLableY = ui->lbl_image->pos().y()+ ui->centralWidget->pos().y()+ui->toggle_btm_showMask->pos().y();
+          CroppedRect.setBottomRight(QPoint(event->pos().x()-posImageLableX, event->pos().y()-posImageLableY));
+          //printf("\n Cropped Rect bottom right x=%i und y=%i", CroppedRect.bottomRight().x(), CroppedRect.bottomRight().y());
+           paintRect();
        }
 }
 
    void MainWindow::mouseReleaseEvent(QMouseEvent *event){
-        paintRect();
-        if(isDrawing){
+       paintRect();
+       if(isDrawing){
        //When mouse is released update for the one last time
        isSelect = false;
        isDrawing = false;
         }
    }
 
+   void MainWindow::paintSubContour(int n){
+       Mat temp = imageCV.clone();
+        vector<vector<Point> > SubContours;
+        SubContours.push_back(SubContour);
+        drawContours( temp, SubContours, n, Scalar (0, 255,0), 2, 8, hierarchy, 0, Point() );
+       imageQT= Mat2QImage(temp);
+       ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
+        }
 
 
    void MainWindow::paintRect(){
-       QPainter painter(&image);
+       imageQT= Mat2QImage(imageCVwithContour);
+       QPainter painter(&imageQT);
       painter.setPen(redPen);
        if(isSelect && isDrawing){
            painter.drawRect(CroppedRect);
        }
-       ui->lbl_image->setPixmap(QPixmap::fromImage(image));
+       ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
        painter.end();
        paintStartPoint();
        markNrOfContour();
    }
 
    void MainWindow::paintStartPoint(){
-       QPainter painter(&image);
+       QPainter painter(&imageQT);
       painter.setPen(redPenThick);
        if(isSelect && isDrawing){
            painter.drawPoint(CroppedRect.topLeft());
        }
-       ui->lbl_image->setPixmap(QPixmap::fromImage(image));
+       ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
        painter.end();
    }
 //Momentan wird nur eine 1 gesetzt, weil nur eine Kontur möglich (ausbaufähig)
 void MainWindow::markNrOfContour(){
-       QPainter painter(&image);
+       QPainter painter(&imageQT);
       painter.setPen(whitePen);
        if(isSelect && isDrawing){
            painter.drawText(QPoint(CroppedRect.topLeft().rx()-2,CroppedRect.topLeft().ry()+3 ), "1");
        }
-       ui->lbl_image->setPixmap(QPixmap::fromImage(image));
+       ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
        painter.end();
  }
 
