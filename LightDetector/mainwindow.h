@@ -8,6 +8,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <opencv2/opencv.hpp>
+using std::vector;
+
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +38,8 @@ private slots:
 
     void on_btm_deleteSelection_clicked();
 
+    void on_rad_Con1_toggled(bool checked);
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -54,6 +58,8 @@ private:
     void markNrOfContour();
     void deleteDrawnSelection();
     void paintSubContour(int n);
+    void setNormalVecs(int distance);
+    void drawNormalVecs(int distance);
 
 };
 
