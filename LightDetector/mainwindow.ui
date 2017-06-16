@@ -229,6 +229,35 @@ max-height: 14px;
       <string>Contours:</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btm_intensity">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Calculate Intensity</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btm_ShowN">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>122</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Normals</string>
+     </property>
+    </widget>
    </widget>
    <zorder>toggle_btm_showMask</zorder>
    <zorder>label_1</zorder>

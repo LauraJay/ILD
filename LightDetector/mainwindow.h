@@ -40,6 +40,10 @@ private slots:
 
     void on_rad_Con1_toggled(bool checked);
 
+    void on_btm_intensity_clicked();
+
+    void on_btm_ShowN_clicked();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -60,6 +64,7 @@ private:
     void paintSubContour(int n);
     void setNormalVecs(int distance);
     void drawNormalVecs(int distance);
+    void calculateIntensity(int R, vector<cv::Point> N, vector<cv::Point> L, int A);
 
 };
 

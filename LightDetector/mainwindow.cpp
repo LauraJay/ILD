@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btm_saveSelection->hide();
     ui->btm_deleteSelection->hide();
     ui->lbl_ListContours->hide();
+    ui->btm_intensity->hide();
     isSelect=false;
     isCon1Active = false;
     redPen.setWidth(1);
@@ -108,6 +109,8 @@ void MainWindow::on_btm_restart_clicked()
     ui->btm_deleteSelection->hide();
     ui->btm_saveSelection->hide();
     ui->lbl_ListContours->hide();
+    ui->btm_intensity->hide();
+    ui->btm_ShowN->hide();
     SubContour.clear();
     MainContour.clear();
     hierarchy.clear();
@@ -116,13 +119,22 @@ void MainWindow::on_btm_restart_clicked()
 
 void MainWindow::on_btm_ShowLV_clicked()
 {
+
+}
+
+void MainWindow::on_btm_ShowN_clicked()
+{
     setNormalVecs(distanceOfNormals);
     drawNormalVecs(distanceOfNormals);
+    ui->btm_intensity->show();
+    ui->btm_ShowN->hide();
+
 }
 
 
 void MainWindow::hideVisual(){
     ui->btm_ShowLV->hide();
+    ui->btm_ShowN->hide();
     ui->btm_restart->hide();
     ui->lbl_mask->hide();
     ui->lbl_image->hide();
@@ -130,6 +142,7 @@ void MainWindow::hideVisual(){
 
 void MainWindow::showVisual(){
     ui->btm_ShowLV->show();
+     ui->btm_ShowN->show();
 }
 
 
@@ -242,8 +255,8 @@ void MainWindow::savePartOfContour(){
 void MainWindow::on_btm_selection_clicked()
 {
     isSelect = true;
-    ui->btm_saveSelection->show();
-    ui->btm_deleteSelection->show();
+//    ui->btm_saveSelection->show();
+//    ui->btm_deleteSelection->show();
     ui->btm_selection->hide();
 }
 
@@ -279,6 +292,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
        //When mouse is released update for the one last time
        isSelect = false;
        isDrawing = false;
+       ui->btm_saveSelection->show();
+       ui->btm_deleteSelection->show();
         }
    }
 
@@ -331,15 +346,15 @@ void MainWindow::markNrOfContour(){
 void MainWindow::on_btm_saveSelection_clicked(){
   ui->btm_saveSelection->hide();
   ui->btm_deleteSelection->hide();
-  ui->btm_selection->show();
   ui->btm_ShowLV->show();
+   ui->btm_ShowN->show();
   //cropContour(CroppedRect);
   savePartOfContour();
   isCon1Active = true;
 }
 
 void MainWindow::deleteDrawnSelection(){
-    //optische Löscung der Kontur
+    //optische Löschung der Kontur
     ui->lbl_image->clear();
     bool valid = imageQT.load(filename);
     if(valid){
@@ -372,11 +387,13 @@ void MainWindow::on_btm_deleteSelection_clicked()
 void MainWindow::on_rad_Con1_toggled(bool checked)
 {
     if(checked){
-        printf("checked");
+        paintSubContour(0);
+        //printf("checked");
         isCon1Active = true;
     }
     else if(!checked){
-       printf("not checked");
+        deleteDrawnSelection();
+      // printf("not checked");
        isCon1Active= false;
     }
 }
@@ -419,4 +436,28 @@ void MainWindow::drawNormalVecs(int distance){
 
      ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
      normalPainter.end();
+}
+
+//R ist Einheitszahl= 1
+//3 Unbekannte: L.x, L.y und A (int oder float?)
+//Ist die Frage ob wir die Intensity überhaupt berechnen müssen, weil wir ja eigentlich nur L rausbekommen wollen.
+void MainWindow::calculateIntensity(int R, vector<Point> N, vector<Point> L, int A){
+    int NL;
+
+    for (int i=0; i<L.size(); i++){
+    NL = N.at(i).x * L.at(i).x;
+    NL+= N.at(i).y * L.at(i).y;
+    int I = R * NL +A;
+    printf("\n Die Intensitaet an Normale %i liegt bei: %i ",i, I);
+}
+}
+
+void MainWindow::on_btm_intensity_clicked()
+{
+    vector<Point> L;
+    L.push_back(Point(2,3));
+     L.push_back(Point(3,1));
+      L.push_back(Point(2,4));
+    calculateIntensity(1, normals, L, 4);
+    ui->btm_intensity->hide();
 }
