@@ -65,6 +65,7 @@ private:
     void computePixelCoordsAlongContour();
     void runLineIterator(cv::Mat tempLineImg,cv::Point pt1, cv::Point pt2);
     void sortSubContour();
+    void createM();
 
 };
 
