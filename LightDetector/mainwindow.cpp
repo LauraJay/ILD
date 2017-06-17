@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
+#include <dlib/optimization.h>
 
 using namespace cv;
 using namespace std;
@@ -14,6 +15,7 @@ vector<vector<Point> > MainContour; //Muss wegen cv::findContour() von diesem Ty
 vector<Point> SubContour; //Momentan kann zum Testen nur eine Subkontur erstellt werden
 vector<Point> normals;
 vector<Vec4i> hierarchy;
+Mat M;
 QString filename;
 QRect CroppedRect;
 QPen redPen, redPenThick, whitePen, bluePen;
@@ -119,7 +121,20 @@ void MainWindow::on_btm_restart_clicked()
 
 void MainWindow::on_btm_ShowLV_clicked()
 {
+//    dlib::solve_least_squares_lm(objective_delta_stop_strategy(1e-7).be_verbose(),
+//                                  residual,
+//                                  residual_derivative,
+//                                  data_samples,
+//                                  x);
+   CvLevMarq solver;
+   solver.init	(	3,
+                    normals.size(),
+                    cvTermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, DBL_EPSILON),
+                    false
+                    )	;
+   printf("\n Solver initialisiert.");
 
+//   bool proceed = solver.update( const CvMat *&param, CvMat *&J, CvMat *&err );
 }
 
 void MainWindow::on_btm_ShowN_clicked()
@@ -411,6 +426,7 @@ void MainWindow::setNormalVecs(int distance){
         normals.push_back(normalTwo);
     }
     printf("\n Anzahl Normalen: %i" , normals.size());
+    createM();
 
 }
 
@@ -460,4 +476,21 @@ void MainWindow::on_btm_intensity_clicked()
       L.push_back(Point(2,4));
     calculateIntensity(1, normals, L, 4);
     ui->btm_intensity->hide();
+}
+
+
+//  ( N0x, N0y, 1 )
+//M=( N1x, N1y, 1 )
+//  ( ........... )
+void MainWindow::createM(){
+    M =  Mat::zeros(normals.size(),3 , CV_8U);
+    for(int i = 0; i< normals.size(); i++){
+    M.at<int>(i,0) = normals.at(i).x ;
+    M.at<int>(i,1) = normals.at(i).y ;
+    M.at<int>(i,2) = 1 ;
+    printf("\n Zeile %i von M: %i, %i, %i", i, M.at<int>(i,0), M.at<int>(i,1),  M.at<int>(i,2) );
+    }
+
+
+   imshow("Matrix M", M);
 }
