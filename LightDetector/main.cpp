@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "QtPanel.h"
 #include <QApplication>
 #include"lightcalculator.h"
 

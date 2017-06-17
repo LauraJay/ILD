@@ -1,9 +1,9 @@
 #include "mainwindow.h"
-#include "QtPanel.h"
 #include "QtGui"
 #include "ui_mainwindow.h"
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
+
 
 using namespace cv;
 using namespace std;
@@ -12,6 +12,7 @@ QImage imageQT;
 Mat maskImage, imageCV, imageCVwithContour;
 vector<vector<Point> > MainContour; //Muss wegen cv::findContour() von diesem Typ sein
 vector<Point> SubContour; //Momentan kann zum Testen nur eine Subkontur erstellt werden
+vector<Point> SampledSubContour;
 vector<Point> normals;
 vector<Vec4i> hierarchy;
 QString filename;
@@ -216,6 +217,8 @@ void MainWindow::savePartOfContour(){
     Mat imageDebug = Mat::zeros(maskImage.size(), CV_8UC3);
     Rect r = Rect(Point(xBoxHigh,yBoxHigh),Point(xBoxLow,yBoxLow));
     rectangle(imageDebug,r,Scalar(0,0,255));
+
+
     for (int i=0; i<MainContour.at(0).size(); i++){
         int xCon= MainContour.at(0).at(i).x;
         int yCon= MainContour.at(0).at(i).y;
@@ -237,8 +240,11 @@ void MainWindow::savePartOfContour(){
     if(SubContour.size()>=3){
         ui->lbl_ListContours->show();
         ui->rad_Con1->show();
+        sortSubContour();
         paintSubContour(0);
        imshow("Debug", imageDebug);
+
+       computePixelCoordsAlongContour();
       }
     else if(SubContour.size()<3){
         deleteDrawnSelection();
@@ -250,7 +256,70 @@ void MainWindow::savePartOfContour(){
     }
 }
 
+void  MainWindow::computePixelCoordsAlongContour(){
+    for (int i = 0; i < SubContour.size()-1; ++i) {
+        Mat tempLineImg = maskImage.clone();
+        tempLineImg= Mat::zeros(tempLineImg.size(),tempLineImg.type());
+        line(tempLineImg,SubContour[i],SubContour[i+1],Scalar(255,255,255));
+        if (i==SubContour.size()-2) {
+            imshow("lastLine",tempLineImg);
+        }
+        runLineIterator(tempLineImg, SubContour[i],SubContour[i+1]);
+        //tempLineImg.release();
+    }
+    Mat debug = imageCV.clone();
+    int color =0;
+    circle(debug,SampledSubContour[0],5,Scalar(255,0,0));
+    circle(debug,SampledSubContour[SampledSubContour.size()-1],5,Scalar(255,0,0));
 
+    foreach (Point c, SampledSubContour) {
+    circle(debug,c,1,Scalar(0,0,color));
+    if (color < 255) color++;
+    else color =0;
+    }
+    imshow("pixel Contour",debug);
+
+}
+
+void MainWindow::runLineIterator(Mat tempLineImg,Point pt1, Point pt2){
+    // grabs pixels along the line (pt1, pt2)
+    // from 8-bit 3-channel image to the buffer
+    LineIterator it(tempLineImg, pt1, pt2, 8, true);
+    for(int i = 0; i < it.count; i++, ++it){
+       Point buffer = it.pos();
+       SampledSubContour.push_back(buffer);
+    }
+   }
+
+void MainWindow:: sortSubContour(){
+    // apply it to the contours:
+    vector<Point> SortedSubContour;
+    Point mostLeftDown = Point(imageCV.size().width,0);
+    Point mostRightDown = Point(0,0);
+
+    int mostLeftPos = 0;
+    int mostRightPos = 0;
+    for (int i = 0; i < SubContour.size()-1; ++i) {
+        Point p = SubContour[i];
+        if(p.x<=mostLeftDown.x && p.y >= mostLeftDown.y){
+            mostLeftDown = p;
+            mostLeftPos=i;
+        }
+        if(p.x>=mostRightDown.x && p.y >= mostRightDown.y){
+            mostRightDown = p;
+            mostRightPos=i;
+        }
+    }
+
+   for (int i = mostRightPos; i < SubContour.size(); ++i) {
+        SortedSubContour.push_back(SubContour[i]);
+    }
+   for (int i = 0; i < mostLeftPos; ++i) {
+    SortedSubContour.push_back(SubContour[i]);
+   }
+   SubContour = SortedSubContour;
+  //  std::sort(SubContour.begin(), SubContour.end(), contour_sorter());
+}
 
 void MainWindow::on_btm_selection_clicked()
 {
@@ -399,9 +468,9 @@ void MainWindow::on_rad_Con1_toggled(bool checked)
 }
 
 void MainWindow::setNormalVecs(int distance){
-    for(int i = 0; i <SubContour.size()-distance; i+=distance){
-        Point startPos = SubContour.at(i);
-        Point endPos = SubContour.at(i+distance);
+    for(int i = 0; i <SampledSubContour.size()-distance; i+=distance){
+        Point startPos = SampledSubContour.at(i);
+        Point endPos = SampledSubContour.at(i+distance);
         int dx = endPos.x - startPos.x;
         int dy = endPos.y - startPos.y;
 
@@ -421,9 +490,9 @@ void MainWindow::drawNormalVecs(int distance){
       int i=0;
       int endX, endY;
       while(counter < normals.size()){
-        endX = SubContour.at(i+distance/2).x - normals.at(counter).x;
-        endY = SubContour.at(i+distance/2).y - normals.at(counter).y;
-        normalPainter.drawLine(SubContour.at(i+distance/2).x,SubContour.at(i+distance/2).y,endX,endY);
+        endX = SampledSubContour.at(i+distance/2).x - normals.at(counter).x;
+        endY = SampledSubContour.at(i+distance/2).y - normals.at(counter).y;
+        normalPainter.drawLine(SampledSubContour.at(i+distance/2).x,SampledSubContour.at(i+distance/2).y,endX,endY);
         counter ++;
         i +=distance;
       }

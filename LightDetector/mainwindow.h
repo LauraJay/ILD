@@ -1,19 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <contour.h>
-#include <QtPanel.h>
 
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <opencv2/opencv.hpp>
 using std::vector;
-
-
 namespace Ui {
 class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
@@ -65,6 +62,9 @@ private:
     void setNormalVecs(int distance);
     void drawNormalVecs(int distance);
     void calculateIntensity(int R, vector<cv::Point> N, vector<cv::Point> L, int A);
+    void computePixelCoordsAlongContour();
+    void runLineIterator(cv::Mat tempLineImg,cv::Point pt1, cv::Point pt2);
+    void sortSubContour();
 
 };
 
