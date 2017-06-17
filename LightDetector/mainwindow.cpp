@@ -245,6 +245,8 @@ void MainWindow::savePartOfContour(){
        imshow("Debug", imageDebug);
 
        computePixelCoordsAlongContour();
+       printf("\n Laenge der SampledSubKontur insgesamt: %i " , SampledSubContour.size());
+
       }
     else if(SubContour.size()<3){
         deleteDrawnSelection();
@@ -268,14 +270,11 @@ void  MainWindow::computePixelCoordsAlongContour(){
         //tempLineImg.release();
     }
     Mat debug = imageCV.clone();
-    int color =0;
     circle(debug,SampledSubContour[0],5,Scalar(255,0,0));
     circle(debug,SampledSubContour[SampledSubContour.size()-1],5,Scalar(255,0,0));
 
     foreach (Point c, SampledSubContour) {
-    circle(debug,c,1,Scalar(0,0,color));
-    if (color < 255) color++;
-    else color =0;
+    circle(debug,c,1,Scalar(0,0,255));
     }
     imshow("pixel Contour",debug);
 
