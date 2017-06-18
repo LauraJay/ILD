@@ -6,13 +6,16 @@
 #include <dlib/optimization.h>
 #include "contourcalculator.h"
 
+
 using namespace cv;
 using namespace std;
 
 QImage imageQT;
 Mat maskImage, imageCV, imageCVwithContour;
 vector<Point> normals;
+vector<Vec4i> hierarchy;
 Mat M;
+QString filename;
 QRect CroppedRect;
 QPen redPen, redPenThick, whitePen, bluePen;
 int posImageLableX = 0;
@@ -55,17 +58,19 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete cc;
 }
 
 
 void MainWindow::on_btm_image_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Choose the Image you want to analyse"), "Testbilder/mitMasken", tr("Images (*.jpg)"));
+    filename = QFileDialog::getOpenFileName(this, tr("Choose the Image you want to analyse"), "Testbilder/mitMasken",
+            tr("Images (*.jpg)"));
      std::string str = filename.toStdString();
      imageCV = imread(str.c_str(), CV_LOAD_IMAGE_COLOR);
-     std::string filenameCV = str.substr(0,str.size()-4);
+      std::string filenameCV = str.substr(0,str.size()-4);
+//     printf("\n", filenameCV.c_str());
      filenameCV+="_mask.jpg";
+//     printf(filenameCV.c_str());
 
    Mat maskImageLoaded = imread(filenameCV.c_str(), CV_8UC3);
 
@@ -84,8 +89,11 @@ void MainWindow::on_btm_image_clicked()
             ui->btm_image->hide();
             cv::resize(maskImageLoaded, maskImage, Size(imageQT.width(), imageQT.height()));
             cv::resize(imageCV, imageCV, Size(imageQT.width(), imageQT.height()));
-            cc->setImageCV(imageCV);
-           }
+
+           // printf("\n Bildgroesse width: %i und height: % i" , imageQT.width(), imageQT.height());
+           // printf("\n Labelgroesse width: %i und height: % i" , ui->lbl_image->width(), ui->lbl_image->height());
+           // printf("\n Bildgroesse CV width: %i und height: % i" , maskImage.size().width, maskImage.size().height);
+        }
     }
 }
 
@@ -105,6 +113,7 @@ void MainWindow::on_btm_restart_clicked()
     ui->btm_intensity->hide();
     ui->btm_ShowN->hide();
     cc->clearContours();
+    hierarchy.clear();
 }
 
 
@@ -153,10 +162,9 @@ void MainWindow::showVisual(){
 void MainWindow::on_btm_Run_clicked(){
 
      cc->computeContours(maskImage);
-
      imageCVwithContour = imageCV.clone();
       for (int i=0; i<cc->getMainContour().size(); i++){
-          drawContours( imageCVwithContour, cc->getMainContour(), i, Scalar (0, 255,0), 2, 8, cc->getHierarchy(), 0, Point() );
+          drawContours( imageCVwithContour, cc->getMainContour(), i, Scalar (0, 255,0), 2, 8, hierarchy, 0, Point() );
 
       }
 
@@ -171,6 +179,7 @@ Mat MainWindow::QImage2Mat(QImage const& src){
     Mat tmp(src.height(), src.width(), CV_8UC3, (uchar*) src.bits(), src.bytesPerLine());
     Mat result;
     cvtColor(tmp, result, CV_BGR2RGB);
+    //threshold(result, result, 120, THRESH_BINARY, THRESH_TOZERO);
     return result;
 }
 
@@ -181,8 +190,11 @@ QImage MainWindow::Mat2QImage(Mat const& src){
     resultLarge.bits();
     //Bild so verkleinern, dass es passend in GUI angezeigt wird
     QImage result = resultLarge.scaled(imageQT.width(), imageQT.height(),Qt::KeepAspectRatio);
+//    printf("\n Bildgroesse Result width: %i und height: % i" , result.width(), result.height());
+//    printf("\n Bildgroesse Vorher width: %i und height: % i" , resultLarge.width(), resultLarge.height());
+    return result;
 }
-// kann weg?
+
 void MainWindow::cropContour(QRect rect){
     QImage croppedImage = imageQT.copy(rect);
     croppedImage.save("cropped_Image");
@@ -219,6 +231,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
            posImageLableX = ui->lbl_image->pos().x()+ui->centralWidget->pos().x()+ui->toggle_btm_showMask->pos().x();
            posImageLableY = ui->lbl_image->pos().y()+ ui->centralWidget->pos().y()+ui->toggle_btm_showMask->pos().y();
           CroppedRect.setBottomRight(QPoint(event->pos().x()-posImageLableX, event->pos().y()-posImageLableY));
+          //printf("\n Cropped Rect bottom right x=%i und y=%i", CroppedRect.bottomRight().x(), CroppedRect.bottomRight().y());
            paintRect();
        }
 }
@@ -234,11 +247,11 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
         }
    }
 
-   void MainWindow::paintSubContour(){
+   void MainWindow::paintSubContour(int n){
        Mat temp = imageCV.clone();
-       for (int i = 0; i < cc->getSubContour().size()-1; ++i) {
-        line(temp,cc->getSubContour()[i],cc->getSubContour()[i+1],Scalar (0, 255,0), 2);
-       }
+        vector<vector<Point> > SubContours;
+        cc->getSubContour().push_back(SubContour);
+        drawContours( temp, cc->getSubContour(), n, Scalar (0, 255,0), 2, 8, hierarchy, 0, Point() );
        imageQT= Mat2QImage(temp);
        ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
         }
@@ -286,40 +299,30 @@ void MainWindow::on_btm_saveSelection_clicked(){
   ui->btm_ShowLV->show();
    ui->btm_ShowN->show();
   //cropContour(CroppedRect);
-  cc->savePartOfContour(CroppedRect);
-  if(cc->getSubContour().size()>=3){
-      paintSubContour();
-      ui->lbl_ListContours->show();
-      ui->rad_Con1->setChecked(true);
-      ui->rad_Con1->show();
-  }
-  else if(cc->getSubContour().size()<3){
-     deleteDrawnSelection();
-     QMessageBox::information(
-                 this,
-                 tr("Warning"),
-                 tr("Selection was not saved, because its belonging Contour was too short for further calculations.") );
-
- }
+  cc->savePartOfContour();
   isCon1Active = true;
 }
 
 void MainWindow::deleteDrawnSelection(){
     //optische Löschung der Kontur
-
-
-     ui->lbl_image->clear();
-     imageQT = Mat2QImage(imageCV.clone());
-     ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
-
+    ui->lbl_image->clear();
+    bool valid = imageQT.load(filename);
+    if(valid){
+     imageQT=imageQT.scaled(ui->lbl_image->width(),ui->lbl_image->height(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
+    }
 
     //Löschen des Konturenvektors:
     //Löschen der Normalen und des Subkonturen falls wir Button auch verwenden wollen um nachträglich Konturen zu löschen :)
-    cc->clearContours();
-    normals.clear();
-//    printf("\n \n Anzahl Main-Normale nach Loeschung: %i", cc->getMainContour().size());
-//    printf("\n Anzahl Sub-Normalen nach Loeschung: %i", normals.size());
-//    printf("\n Anzahl Subkonturen nach Loeschung: %i", cc->getSubContour().size());
+    printf("\n \n Anzahl Main-Normale vor Loeschung: %i", cc->getMainContour().size());
+    printf("\n Anzahl Sub-Normalen vor Loeschung: %i", normals.size());
+    printf("\n Anzahl Subkonturen vor Loeschung: %i", SubContour.size());
+    cc->getMainContour().erase(cc->getMainContour().begin(), cc->getMainContour().end());
+    SubContour.erase(SubContour.begin(), SubContour.end());
+    normals.erase(normals.begin(),normals.end());
+    printf("\n \n Anzahl Main-Normale nach Loeschung: %i", cc->getMainContour().size());
+    printf("\n Anzahl Sub-Normalen nach Loeschung: %i", normals.size());
+    printf("\n Anzahl Subkonturen nach Loeschung: %i", SubContour.size());
 
 }
 
@@ -334,11 +337,13 @@ void MainWindow::on_btm_deleteSelection_clicked()
 void MainWindow::on_rad_Con1_toggled(bool checked)
 {
     if(checked){
-        paintSubContour();
+        paintSubContour(0);
+        //printf("checked");
         isCon1Active = true;
     }
     else if(!checked){
         deleteDrawnSelection();
+      // printf("not checked");
        isCon1Active= false;
     }
 }
@@ -367,9 +372,9 @@ void MainWindow::drawNormalVecs(int distance){
       int i=0;
       int endX, endY;
       while(counter < normals.size()){
-        endX = cc->getSampledSubContour().at(i+distance/2).x - normals.at(counter).x;
-        endY = cc->getSampledSubContour().at(i+distance/2).y - normals.at(counter).y;
-        normalPainter.drawLine(cc->getSampledSubContour().at(i+distance/2).x,cc->getSampledSubContour().at(i+distance/2).y,endX,endY);
+        endX = SampledSubContour.at(i+distance/2).x - normals.at(counter).x;
+        endY = SampledSubContour.at(i+distance/2).y - normals.at(counter).y;
+        normalPainter.drawLine(SampledSubContour.at(i+distance/2).x,SampledSubContour.at(i+distance/2).y,endX,endY);
         counter ++;
         i +=distance;
       }

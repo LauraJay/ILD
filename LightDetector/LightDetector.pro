@@ -29,11 +29,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     #Laura
     ../../../../../../dlib-19.4/dlib/all/source.cpp \
-    lightcalculator.cpp
+    lightcalculator.cpp \
+    contourcalculator.cpp
 
 
 HEADERS  += mainwindow.h \
-    lightcalculator.h
+    lightcalculator.h \
+    contourcalculator.h
 
 FORMS    += mainwindow.ui \
     mainwindow_LiveWire.ui

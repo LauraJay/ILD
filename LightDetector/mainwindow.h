@@ -52,20 +52,17 @@ private:
     void hideVisual();
     cv::Mat QImage2Mat(QImage const& src);
     QImage Mat2QImage(cv::Mat const& src);
-    void cropContour(QRect rect);
-    void savePartOfContour();
     void paintRect();
     void paintStartPoint();
     void markNrOfContour();
     void deleteDrawnSelection();
-    void paintSubContour(int n);
+    void paintSubContour();
     void setNormalVecs(int distance);
     void drawNormalVecs(int distance);
     void calculateIntensity(int R, vector<cv::Point> N, vector<cv::Point> L, int A);
-    void computePixelCoordsAlongContour();
-    void runLineIterator(cv::Mat tempLineImg,cv::Point pt1, cv::Point pt2);
-    void sortSubContour();
     void createM();
+    void cropContour(QRect rect);
+
 
 };
 
