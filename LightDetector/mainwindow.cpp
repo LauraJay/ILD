@@ -252,9 +252,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
            painter.drawRect(CroppedRect);
        }
        ui->lbl_image->setPixmap(QPixmap::fromImage(imageQT));
-       painter.end();
        paintStartPoint();
        markNrOfContour();
+       painter.end();
    }
 
    void MainWindow::paintStartPoint(){
